@@ -14,7 +14,7 @@ main{
         justify-content: center;
     }
     .main-section{
-       
+       height: 100%;
         gap: 8px;
 
         flex-grow: 1;
@@ -72,6 +72,10 @@ main{
                 font-weight: 500;
                 background: transparent;
                 padding: 12px 24px;
+
+                &:disabled {
+                    opacity: 0.8;
+                }
     
                 &.btn-primary {
                     background-color: $primary-color;
