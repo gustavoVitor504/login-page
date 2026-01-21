@@ -1,30 +1,32 @@
 import { ToastrService } from 'ngx-toastr';
-import { LoginService } from './../../services/login.service';
+import { LoginService } from '../../services/login.service';
 import { Component } from '@angular/core';
 import { DefaultLoginLayoutComponent } from '../../components/default-login-layout/default-login-layout.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
 import { Router } from '@angular/router';
 
-interface LoginForm {
+interface SignupForm {
+  name: FormControl;
   email: FormControl;
   password: FormControl;
+  passwordConfirm: FormControl;
 }
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   standalone: true,
   imports: [DefaultLoginLayoutComponent,
     ReactiveFormsModule,
     PrimaryInputComponent
   ],
   providers: [LoginService],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss'
 })
-export class LoginComponent {
+export class SignupComponent {
 
-  loginForm!: FormGroup<LoginForm>;
+  signupForm!: FormGroup<SignupForm>;
 
   constructor(
     private router: Router,
@@ -33,17 +35,19 @@ export class LoginComponent {
   ) {
 
 
-    this.loginForm = new FormGroup({
+    this.signupForm = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      passwordConfirm: new FormControl('', [Validators.required, Validators.minLength(6)])
 
 
     });
   }
   submit() {
     this.loginService.login(
-      this.loginForm.value.email,
-      this.loginForm.value.password
+      this.signupForm.value.email,
+      this.signupForm.value.password
     ).subscribe({
       next: () => {
         this.toastrService.success('Login successful!');
@@ -54,6 +58,6 @@ export class LoginComponent {
     });
   }
   navigate() {
-    this.router.navigate(['signup']);
+    this.router.navigate(['login']);
   }
 }
