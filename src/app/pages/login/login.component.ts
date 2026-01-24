@@ -47,6 +47,7 @@ export class LoginComponent {
     ).subscribe({
       next: () => {
         this.toastrService.success('Login successful!');
+        this.router.navigate(['user']);
       },
       error: (err) => {
         this.toastrService.error('Login failed: ' + err.message);
