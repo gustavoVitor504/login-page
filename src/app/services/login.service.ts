@@ -17,8 +17,13 @@ export class LoginService {
       tap((value) => {
         sessionStorage.setItem('auth-token', value.token);
         sessionStorage.setItem('username', value.name);
-        // Após login, redireciona para o pesca-page com o token na URL
-        window.location.href = `http://localhost:4200?token=${value.token}&username=${value.name}`;
+        const isProd = window.location.hostname !== 'localhost';
+
+        const pescaUrl = isProd
+        ? 'pesca-page-46l3.vercel.app'
+        : 'http://localhost:4200';
+
+      window.location.href = `${pescaUrl}?token=${value.token}&username=${value.name}`;
       })
     );
   }
@@ -28,8 +33,13 @@ export class LoginService {
       tap((value) => {
         sessionStorage.setItem('auth-token', value.token);
         sessionStorage.setItem('username', value.name);
-        // Após cadastro, também redireciona
-        window.location.href = `http://localhost:4200?token=${value.token}&username=${value.name}`;
+        
+        const isProd = window.location.hostname !== 'localhost';
+        const pescaUrl = isProd
+        ? 'pesca-page-46l3.vercel.app'
+        : 'http://localhost:4200';
+
+      window.location.href = `${pescaUrl}?token=${value.token}&username=${value.name}`;
       })
     );
   }
