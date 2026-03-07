@@ -36,7 +36,7 @@ export class LoginService {
         
         const isProd = window.location.hostname !== 'localhost';
         const pescaUrl = isProd
-        ? 'pesca-page-46l3.vercel.app'
+        ? 'https://pesca-page-46l3.vercel.app'
         : 'http://localhost:4200';
 
       window.location.href = `${pescaUrl}?token=${value.token}&username=${value.name}`;
