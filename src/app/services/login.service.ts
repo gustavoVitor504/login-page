@@ -2,27 +2,35 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { LoginResponse } from '../types/login-response.type';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  apiUrl:string = "http://localhost:8080/auth"
+  apiUrl: string = `${environment.apiUrl}/auth`;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   login(email: string, password: string) {
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/login", { email, password }).pipe(
       tap((value) => {
-      sessionStorage.setItem('auth-token', value.token);
-      sessionStorage.setItem('username', value.name);
-    }));
+        sessionStorage.setItem('auth-token', value.token);
+        sessionStorage.setItem('username', value.name);
+        // Após login, redireciona para o pesca-page com o token na URL
+        window.location.href = `http://localhost:4200?token=${value.token}&username=${value.name}`;
+      })
+    );
   }
-  signup(name:string , email: string, password: string) {
+
+  signup(name: string, email: string, password: string) {
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/register", { name, email, password }).pipe(
       tap((value) => {
-      sessionStorage.setItem('auth-token', value.token);
-      sessionStorage.setItem('username', value.name);
-    }));
+        sessionStorage.setItem('auth-token', value.token);
+        sessionStorage.setItem('username', value.name);
+        // Após cadastro, também redireciona
+        window.location.href = `http://localhost:4200?token=${value.token}&username=${value.name}`;
+      })
+    );
   }
 }
