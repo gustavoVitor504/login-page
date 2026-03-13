@@ -1,4 +1,12 @@
-<app-default-login-layout 
+<div *ngIf="emailEnviado" class="verify-message">
+  <span class="material-icons">mark_email_unread</span>
+  <h2>Verifique seu email!</h2>
+  <p>Enviamos um link de verificação para <strong>{{ emailCadastrado }}</strong></p>
+  <p>Clique no link para ativar sua conta e fazer login.</p>
+  <button (click)="navigate()">Ir para o Login</button>
+</div>
+
+<app-default-login-layout *ngIf="!emailEnviado"
 title="Sign in and start today!"
 primaryBtnText="Signup Now"
 secondaryBtnText="Login Now"

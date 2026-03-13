@@ -15,32 +15,22 @@ export class LoginService {
   login(email: string, password: string) {
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/login", { email, password }).pipe(
       tap((value) => {
+        if (!value.token) return;
+
         sessionStorage.setItem('auth-token', value.token);
         sessionStorage.setItem('username', value.name);
+
         const isProd = window.location.hostname !== 'localhost';
-
         const pescaUrl = isProd
-        ? 'https://pesca-page-46l3.vercel.app'
-        : 'http://localhost:4200';
+          ? 'https://pesca-page-46l3.vercel.app'
+          : 'http://localhost:4200';
 
-      window.location.href = `${pescaUrl}?token=${value.token}&username=${value.name}`;
+        window.location.href = `${pescaUrl}?token=${value.token}&username=${value.name}`;
       })
     );
   }
 
   signup(name: string, email: string, password: string) {
-    return this.httpClient.post<LoginResponse>(this.apiUrl + "/register", { name, email, password }).pipe(
-      tap((value) => {
-        sessionStorage.setItem('auth-token', value.token);
-        sessionStorage.setItem('username', value.name);
-        
-        const isProd = window.location.hostname !== 'localhost';
-        const pescaUrl = isProd
-        ? 'https://pesca-page-46l3.vercel.app'
-        : 'http://localhost:4200';
-
-      window.location.href = `${pescaUrl}?token=${value.token}&username=${value.name}`;
-      })
-    );
+    return this.httpClient.post<LoginResponse>(this.apiUrl + "/register", { name, email, password });
   }
 }

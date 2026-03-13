@@ -45,11 +45,13 @@ export class LoginComponent {
       this.loginForm.value.email,
       this.loginForm.value.password
     ).subscribe({
-      next: () => {
-        this.toastrService.success('Login successful!');
-      },
+      next: () => {},
       error: (err) => {
-        this.toastrService.error('Login failed: ' + err.message);
+        if (err.status === 403 || err.error?.message?.includes('EMAIL_NOT_VERIFIED')) {
+          this.toastrService.warning('Verifique seu email antes de fazer login.');
+        } else {
+          this.toastrService.error('Email ou senha incorretos.');
+        }
       }
     });
   }

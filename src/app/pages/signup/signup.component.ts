@@ -5,6 +5,7 @@ import { DefaultLoginLayoutComponent } from '../../components/default-login-layo
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
 import { Router } from '@angular/router';
+import { NgIf } from '@angular/common';
 
 interface SignupForm {
   name: FormControl;
@@ -18,7 +19,8 @@ interface SignupForm {
   standalone: true,
   imports: [DefaultLoginLayoutComponent,
     ReactiveFormsModule,
-    PrimaryInputComponent
+    PrimaryInputComponent,
+    NgIf
   ],
   providers: [LoginService],
   templateUrl: './signup.component.html',
@@ -26,6 +28,8 @@ interface SignupForm {
 })
 export class SignupComponent {
 
+  emailEnviado = false; 
+  emailCadastrado = '';
   signupForm!: FormGroup<SignupForm>;
 
   constructor(
@@ -50,11 +54,12 @@ export class SignupComponent {
       this.signupForm.value.email,
       this.signupForm.value.password
     ).subscribe({
-      next: () => {
-        this.toastrService.success('Login successful!');
+      next: (res) => {
+        this.emailCadastrado = this.signupForm.value.email;
+        this.emailEnviado = true; // ← mostra tela de confirmação
       },
       error: (err) => {
-        this.toastrService.error('Login failed: ' + err.message);
+        this.toastrService.error('Erro no cadastro: ' + (err.error?.message || err.message));
       }
     });
   }
